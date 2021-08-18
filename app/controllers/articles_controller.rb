@@ -10,10 +10,19 @@ class ArticlesController < ApplicationController
 
   end
   def new
+    @article = Article.new
   end
 
   def create
-    render plain: params[:article]
+    @article = Article.new(params.require(:article).permit(:title, :description))
+    # this requires the article key and permits only the use of title and description
+    if @article.save # save the created article
+      #This gives a notice
+      flash[:notice] = "Article was created succesfully."
+      redirect_to @article
+    else
+      render 'new'
+    end
   end
 
 
